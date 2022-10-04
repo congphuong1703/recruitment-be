@@ -1,0 +1,37 @@
+version: '2'
+services:
+  registryservice:
+    build: registryservice
+    mem_limit: 512M
+    ports:
+      - "8761:8761"
+  requestservice:
+    build: RequestService
+    mem_limit: 512M
+    ports:
+      - "8000:8000"
+  searchservice:
+    build: SearchService
+    mem_limit: 512M
+    ports:
+      - "8001:8001"
+  syncservice:
+    build: SyncService
+    mem_limit: 512M
+    ports:
+      - "8002:8002"
+  gatewayservice:
+    build: gatewayservice
+    mem_limit: 512M
+    ports:
+      - "8090:8090"
+    links:
+      - requestservice:requestservice
+      - searchservice:searchservice
+      - registryservice:registryservice
+      - syncservice:syncservice
+    depends_on:
+      - requestservice
+      - searchservice
+      - registryservice
+      - syncservice
